@@ -1,0 +1,15 @@
+channels:
+  - conda-forge
+  - pkgs/main
+  - pkgs/r
+dependencies:
+  - r-base
+  - jags
+  - r-rjags
+  - r-r2jags
+  - r-label.switching
+  - r-ggplot2
+  - r-rmarkdown
+  - r-coda
+  - r-optparse
+  - r-tidyverse

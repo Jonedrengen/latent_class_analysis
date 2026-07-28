@@ -1,0 +1,11 @@
+#vscode
+.vscode
+
+#DS_Store
+.DS_Store
+
+#outputs
+outputs/
+
+#env
+.conda
