@@ -29,7 +29,7 @@
   columns, scalar options, and data ranges at public function boundaries, with
   clear and stable errors.
 - Avoid adding dependencies unless they materially simplify the implementation.
-  When one is needed, add it to `environment.yml` and keep its use local to the
+  When one is needed, add it to `env.yml` and keep its use local to the
   code that needs it.
 
 ## Tests and verification
@@ -40,7 +40,7 @@
 - Place tests beside the feature they cover using `test-<feature>.R` naming.
   Keep fixtures deterministic, small, and independent of external data or
   network access.
-- Run `Rscript tests/run_tests.R` after changes in an R environment that
-  satisfies `environment.yml`. Do not treat a missing local dependency as a
-  passing test run; report it clearly if the configured environment is not
+- Run `Rscript tests/run_tests.R` after changes in an R env that
+  satisfies `env.yml`. Do not treat a missing local dependency as a
+  passing test run; report it clearly if the configured env is not
   available.
