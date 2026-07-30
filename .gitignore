@@ -9,3 +9,6 @@ outputs/
 
 #env
 .conda
+
+#obsidian
+.obsidian

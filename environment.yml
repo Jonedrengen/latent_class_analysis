@@ -13,3 +13,5 @@ dependencies:
   - r-coda
   - r-optparse
   - r-tidyverse
+  - r-testthat
+  - r-treemapify
