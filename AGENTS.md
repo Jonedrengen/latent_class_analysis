@@ -28,9 +28,7 @@
   an intentional behavior change is part of the task. Validate required input
   columns, scalar options, and data ranges at public function boundaries, with
   clear and stable errors.
-- Avoid adding dependencies unless they materially simplify the implementation.
-  When one is needed, add it to `env.yml` and keep its use local to the
-  code that needs it.
+- Avoid adding dependencies. Explicitely ask if deemed 
 
 ## Tests and verification
 
