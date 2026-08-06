@@ -1,0 +1,54 @@
+---
+title: "Bayesian Latent Class Model Report"
+output:
+  html_document:
+    self_contained: true
+params:
+  report: NULL
+---
+
+```{r setup, include=FALSE}
+report <- params$report
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Input summary
+
+```{r}
+knitr::kable(data.frame(samples = report$input$samples, training_rows = report$input$training, prediction_rows = report$input$prediction, features = paste(report$input$features, collapse = ", "), classes = paste(report$input$classes, collapse = ", ")))
+```
+
+## Sampling summary
+
+```{r}
+knitr::kable(as.data.frame(unclass(report$sampling)))
+```
+
+## Prediction summary
+
+```{r}
+knitr::kable(as.data.frame(table(predicted_class = report$predictions$predicted_class)))
+entropy <- stats::quantile(report$predictions$normalized_entropy, na.rm = TRUE)
+knitr::kable(data.frame(statistic = names(entropy), normalized_entropy = unname(entropy)))
+```
+
+## Validation
+
+```{r}
+for (name in names(report$validations)) {
+  value <- report$validations[[name]]
+  cat("###", name, "\n\n")
+  if (is.list(value) && identical(value$n_truth, 0L)) cat("No held-out truth labels are available.\n\n")
+  else if (is.list(value)) { knitr::kable(data.frame(accuracy = value$accuracy, held_out_truth_labels = value$n_truth)); if (!is.null(value$confusion_matrix)) knitr::kable(value$confusion_matrix) }
+  else print(value)
+}
+eligible <- report$predictions[!is.na(report$predictions$FZEC), , drop = FALSE]
+cat("### FZEC summary\n\n")
+if (!nrow(eligible)) cat("FZEC is unavailable because no eligible held-out human truth labels are available.\n") else knitr::kable(as.data.frame(table(FZEC = eligible$FZEC)))
+```
+
+## Plots
+
+```{r, fig.width=7, fig.height=4}
+for (name in names(report$plots)) { cat("###", name, "\n\n"); print(report$plots[[name]]) }
+```

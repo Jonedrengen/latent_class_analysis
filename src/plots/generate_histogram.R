@@ -1,6 +1,3 @@
-library(ggplot2)
-library(optparse)
-
 generate_hist <- function(input, title = "") {
     #--------docstring----------
   # Creates a histogram of predicted food-animal origin. Isolates are grouped
@@ -44,23 +41,25 @@ generate_hist <- function(input, title = "") {
   )
 
   counts <- as.integer(table(plot_data$group))
+  denominator <- sum(counts)
+  percentages <- if (denominator) round(100 * counts / denominator, 1) else rep(0, length(counts))
   labels <- paste0(
     groups,
     "\nn=", counts,
-    " (", round(100 * counts / sum(counts), 1), "%)"
+    " (", percentages, "%)"
   )
 
-  ggplot(plot_data, aes(x = Meat_pred, fill = group)) +
-    geom_histogram(binwidth = 0.02, boundary = 0) +
-    geom_vline(xintercept = c(0.2, 0.8), linetype = "dashed") +
-    annotate("text", x = c(0.1, 0.5, 0.9), y = Inf, label = labels, vjust = 1.5) +
-    scale_fill_manual(values = colors, drop = FALSE) +
-    scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.2)) +
-    labs(
+  ggplot2::ggplot(plot_data, ggplot2::aes(x = .data$Meat_pred, fill = .data$group)) +
+    ggplot2::geom_histogram(binwidth = 0.02, boundary = 0) +
+    ggplot2::geom_vline(xintercept = c(0.2, 0.8), linetype = "dashed") +
+    ggplot2::annotate("text", x = c(0.1, 0.5, 0.9), y = Inf, label = labels, vjust = 1.5) +
+    ggplot2::scale_fill_manual(values = colors, drop = FALSE) +
+    ggplot2::scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.2)) +
+    ggplot2::labs(
       title = title,
       x = "Predicted probability of food-animal origin (meat)",
       y = "Isolate count"
     ) +
-    theme_classic() +
-    theme(plot.title = element_text(hjust = 0.5), legend.position = "none")
+    ggplot2::theme_classic() +
+    ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5), legend.position = "none")
 }
