@@ -1,0 +1,25 @@
+model {
+  # Binary-feature likelihood and partially observed class assignments.
+  for (i in 1:N) {
+    for (p in 1:P) {
+      x[i, p] ~ dbern(probability[eta[i], p])
+    }
+    eta[i] ~ dcat(pi[])
+  }
+
+  # Legacy logistic-normal prior on class prevalence.
+  for (k in 1:K) {
+    class_logit[k] ~ dnorm(0, 4 / 9)
+    exp_class_logit[k] <- exp(class_logit[k])
+  }
+  sum_exp_class_logit <- sum(exp_class_logit[])
+  for (k in 1:K) {
+    pi[k] <- exp_class_logit[k] / sum_exp_class_logit
+
+    # Legacy logistic-normal prior on each class-feature probability.
+    for (p in 1:P) {
+      feature_logit[k, p] ~ dnorm(0, 4 / 9)
+      probability[k, p] <- 1 / (1 + exp(-feature_logit[k, p]))
+    }
+  }
+}

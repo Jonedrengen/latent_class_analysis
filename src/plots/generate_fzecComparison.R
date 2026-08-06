@@ -2,6 +2,7 @@ library(ggplot2)
 library(dplyr)
 library(optparse)
 
+
 generate_ST_dist <- function(input, top_n = 20, title = "ST distribution: FZEC vs Non-FZEC") {
    #--------docstring----------
   # @Parameter: input (data frame)
@@ -16,21 +17,6 @@ generate_ST_dist <- function(input, top_n = 20, title = "ST distribution: FZEC v
   # save: ggsave(file="DTU_TAIWAN_treemap.svg", plot=big_treemap, width=18, height=14)
   #
   # dependencies: ggplot2, dplyr
-  if (!is.data.frame(input) || !all(c("MLST", "Meat_pred") %in% names(input))) {
-    stop("`input` must be a data frame containing `MLST` and `Meat_pred`.", call. = FALSE)
-  }
-  if (
-    !is.numeric(input$Meat_pred) ||
-      any(!is.finite(input$Meat_pred) | input$Meat_pred < 0 | input$Meat_pred > 1)
-  ) {
-    stop("`Meat_pred` must contain finite numeric values between 0 and 1.", call. = FALSE)
-  }
-  if (any(is.na(input$MLST) | trimws(as.character(input$MLST)) == "")) {
-    stop("`MLST` must not contain missing or empty values.", call. = FALSE)
-  }
-  if (length(top_n) != 1 || !is.numeric(top_n) || top_n < 1 || top_n != as.integer(top_n)) {
-    stop("`top_n` must be a positive integer.", call. = FALSE)
-  }
 
   colors <- c("Non-FZEC" = "goldenrod1", "FZEC" = "red3")
   plot_data <- data.frame(MLST = as.character(input$MLST), Meat_pred = input$Meat_pred) %>%
