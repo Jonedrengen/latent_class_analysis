@@ -14,7 +14,6 @@ outputs/
 .obsidian
 
 #src
-src/models/
 
 #plans
 old_plans/*
