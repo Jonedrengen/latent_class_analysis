@@ -1,25 +1,31 @@
-model {
-  # Binary-feature likelihood and partially observed class assignments.
-  for (i in 1:N) {
-    for (p in 1:P) {
-      x[i, p] ~ dbern(probability[eta[i], p])
+model{
+  # Likelihood
+  for (i in 1:N){
+    for (k in 1:K){
+      Y[i,k] ~ dbern(p[eta[i],k])
     }
-    eta[i] ~ dcat(pi[])
+    eta[i] ~ dcat(pi[1:M_fit])
   }
-
-  # Legacy logistic-normal prior on class prevalence.
-  for (k in 1:K) {
-    class_logit[k] ~ dnorm(0, 4 / 9)
-    exp_class_logit[k] <- exp(class_logit[k])
+  
+  # --- Prior for Class Proportions (pi) using Softmax ---
+  
+  # 1. Calculate exponential of 'a' element-wise 
+  for (j in 1:M_fit){
+    a[j] ~ dnorm(0, 4/9)
+    exp_a[j] <- exp(a[j])
   }
-  sum_exp_class_logit <- sum(exp_class_logit[])
-  for (k in 1:K) {
-    pi[k] <- exp_class_logit[k] / sum_exp_class_logit
-
-    # Legacy logistic-normal prior on each class-feature probability.
-    for (p in 1:P) {
-      feature_logit[k, p] ~ dnorm(0, 4 / 9)
-      probability[k, p] <- 1 / (1 + exp(-feature_logit[k, p]))
+  
+  # 2. Sum the exponentials (Scalar sum of the vector)
+  sum_exp_a <- sum(exp_a[1:M_fit])
+  
+  # 3. Calculate pi and define Feature Probabilities
+  for (j in 1:M_fit){
+    pi[j] <- exp_a[j] / sum_exp_a
+    
+    # Feature probabilities (Logistic transformation)
+    for (k in 1:K){
+      p[j,k] <- 1/(1+exp(-g[j,k]))
+      g[j,k] ~ dnorm(0, 4/9)
     }
   }
 }

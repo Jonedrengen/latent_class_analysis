@@ -2,18 +2,8 @@
 #remember to add your func to the main validator func at the bottom of this file
 # - Jon
 
-
-blcm_abort <- function(message) {
-  stop(message, call. = FALSE)
-}
-
-get_blcm_class_columns <- function(data) {
-  grep("^CLASS_", names(data), value = TRUE)
-}
-
-get_blcm_feature_columns <- function(data) {
-  grep("^FEATURE_", names(data), value = TRUE)
-}
+#blcm utils
+source(file.path(.blcm_dir, "blcm_utilities.R"))
 
 validate_blcm_cli_options <- function(options) {
   if (!file.exists(options$input)) {
@@ -25,6 +15,7 @@ validate_blcm_cli_options <- function(options) {
   }
 }
 
+#id_column and training_column, not currently used. 11/08/2026
 validate_blcm_data_input <- function(
   data,
   id_column = "Sample_Name",
@@ -38,12 +29,17 @@ validate_blcm_data_input <- function(
     blcm_abort("at least two CLASS_ columns are required")
   }
 
+  #TODO: validate that the class columns are binary (0/1) and that each row has at most one class label. 11/08/2026
+
   #validate FEATURE_ cols
   feature_columns <- get_blcm_feature_columns(data)
 
-  if (!length(feature_columns)) {
-    blcm_abort("at least one FEATURE_ column is required")
+  if (!length(feature_columns) < 2L) {
+    blcm_abort("at least two FEATURE_ column is required")
   }
+
+  #TODO: validate that the feature columns are binary (0/1). 11/08/2026
+
 }
 
 #TODO: write condig validation function
@@ -58,5 +54,6 @@ validate_input <- function(options, data, config = NULL) {
   validate_blcm_cli_options(options)
   validate_blcm_data_input(data)
   validate_config(config)
-}
 
+  data
+}

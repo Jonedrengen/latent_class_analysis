@@ -37,7 +37,7 @@ logs_to_file <- function(formatted_logs, file_path) {
   output_file
 }
 
-#logging func
+#logging func wrapper
 logger <- function(message = "default message",
                    data = c("default:", "no", "data", "found"),
                    log_file_path = "default_log.txt") {
