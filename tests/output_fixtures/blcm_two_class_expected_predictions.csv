@@ -1,0 +1,3 @@
+Sample_Name,observed_class,predicted_class
+held_out_human,CLASS_Human,CLASS_Human
+held_out_animal,CLASS_Animal,CLASS_Animal

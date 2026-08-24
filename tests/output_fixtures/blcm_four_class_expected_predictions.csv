@@ -1,0 +1,5 @@
+Sample_Name,observed_class,expected_predicted_class
+human_test_01,CLASS_Human,CLASS_Human
+human_test_02,CLASS_Human2,CLASS_Human2
+animal_test_01,CLASS_Animal,CLASS_Animal
+animal_test_02,CLASS_Animal2,CLASS_Animal2

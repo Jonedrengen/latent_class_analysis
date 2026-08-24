@@ -1,0 +1,15 @@
+Sample_Name,training,CLA_Human,CLA_Human2,CLA_Animal,CLA_Animal2,FEA_human_1,FEA_human_2,FEA_animal_3,FEA_animal_4
+human_training_01,1,1,0,0,0,1,1,0,0
+human_training_02,1,1,0,0,0,1,1,0,0
+human_training_03,1,1,0,0,0,1,1,0,0
+human_training_04,1,0,1,0,0,1,0,0,0
+human_training_05,1,0,1,0,0,1,0,0,0
+animal_training_01,1,0,0,1,0,0,0,1,1
+animal_training_02,1,0,0,1,0,0,0,1,1
+animal_training_03,1,0,0,1,0,0,0,1,1
+animal_training_04,1,0,0,0,1,0,0,1,0
+animal_training_05,1,0,0,0,1,0,0,1,0
+human_test_01,0,1,0,0,0,1,1,0,0
+human_test_02,0,0,1,0,0,1,0,0,0
+animal_test_01,0,0,0,1,0,0,0,1,1
+animal_test_02,0,0,0,0,1,0,0,1,0
