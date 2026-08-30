@@ -39,13 +39,12 @@ validate_binary_column <- function(data, columns) {
 #id_column and training_column, not currently used. 11/08/2026
 validate_blcm_data_input <- function(
   data,
-  id_column = "Sample_Name",
-  training_column = "training"
+  config
 ) {
 
   #validate class "CLA_" cols
   #__________________________
-  class_column_names <- get_blcm_class_column_names(data, data_column_configuration$class_columns_prefix)
+  class_column_names <- get_blcm_class_column_names(data, config$class_columns_prefix)
 
   if (length(class_column_names) < 2L) {
     failed_validation("at least two CLA_ columns are required")
@@ -56,7 +55,7 @@ validate_blcm_data_input <- function(
 
   #validate feature "FEA_" cols
   #__________________________
-  feature_column_names <- get_blcm_feature_column_names(data, data_column_configuration$feature_columns_prefix)
+  feature_column_names <- get_blcm_feature_column_names(data, config$feature_columns_prefix)
 
   if (length(feature_column_names) < 2L) {
     failed_validation("at least two FEA_ column is required")
@@ -72,7 +71,7 @@ validate_blcm_data_input <- function(
 
 validate_input <- function(options, data, config = NULL) {
   validate_options(options)
-  validate_blcm_data_input(data)
+  validate_blcm_data_input(data, config$data_column_configuration)
   validate_config(config)
 
   data

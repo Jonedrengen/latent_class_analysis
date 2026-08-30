@@ -52,7 +52,7 @@ two_classes_fixture <- data.frame(
 
 #eta
 test_that("generate eta vector works for 2 classes, 4 features, 16 samples", {
-  eta <- create_eta_vector(four_features_fixture, data_column_configuration)
+  eta <- create_eta_vector(four_features_fixture, config$data_column_configuration)
   eta_four_features_fixture <- c(1L, 1L, 1L, 1L,
                                 2L, 2L, 2L, 2L,
                                 NA_integer_, NA_integer_,
@@ -65,7 +65,7 @@ test_that("generate eta vector works for 2 classes, 4 features, 16 samples", {
 
 #eta 
 test_that("eta vector generates ", {
-  eta <- create_eta_vector(four_features_fixture, data_column_configuration)
+  eta <- create_eta_vector(four_features_fixture, config$data_column_configuration)
   expect_true(length(eta) == nrow(four_features_fixture))
   expect_true(eta[1] == 1L)
   expect_true(eta[5] == 2L)
@@ -74,7 +74,7 @@ test_that("eta vector generates ", {
 
 #Y matrix
 test_that("generate Y matrix works for 2 classes, 2 features, 4 samples", {
-  Y <- create_Y_matrix(two_classes_fixture)
+  Y <- create_Y_matrix(two_classes_fixture, config$data_column_configuration)
   Y_two_classes_fixture <- matrix(c(0, 0, 1, 1, 1, 1, 0, 0), nrow = 4)
   expect_equal(nrow(Y), nrow(Y_two_classes_fixture))
   expect_equal(ncol(Y), ncol(Y_two_classes_fixture))
@@ -82,7 +82,7 @@ test_that("generate Y matrix works for 2 classes, 2 features, 4 samples", {
 
 #jags_data list (Y, M_fit, N, K, eta)
 test_that("jags_data list is created correctly for four_features_fixture", {
-  jags_data <- create_jags_data(four_features_fixture)
+  jags_data <- create_jags_data(four_features_fixture, config)
   expect_equal(dim(jags_data$Y), c(nrow(four_features_fixture), 4))
   expect_equal(jags_data$M_fit, 2)
   expect_equal(jags_data$N, nrow(four_features_fixture))
@@ -92,7 +92,7 @@ test_that("jags_data list is created correctly for four_features_fixture", {
 
 #blcm_data list is prepared correctly
 test_that("blcm_data list is prepared correctly for four_features_fixture", {
-  blcm_data <- prepare_blcm_data(four_features_fixture)
+  blcm_data <- prepare_blcm_data(four_features_fixture, config)
   expect_equal(dim(blcm_data$jags_data$Y), c(nrow(four_features_fixture), 4))
   expect_equal(blcm_data$jags_data$M_fit, 2)
   expect_equal(blcm_data$jags_data$N, nrow(four_features_fixture))
@@ -106,10 +106,10 @@ test_that("blcm_data list is prepared correctly for four_features_fixture", {
 
 # blcm_data has correct structure and class
 test_that("blcm_data has correct structure and class", {
-  blcm_data <- prepare_blcm_data(four_features_fixture)
+  blcm_data <- prepare_blcm_data(four_features_fixture, config)
   expect_true(is.list(blcm_data))
   expect_true(length(blcm_data) == 5)
-  expect_named(blcm_data, c("ids", "class_columns", "feature_columns", "jags_data", "in_init"))
+  expect_named(blcm_data, c("ids", "class_columns", "feature_columns", "jags_data", "inits"))
 
   expect_type(blcm_data$ids, "character")
   expect_type(blcm_data$class_columns, "character")
@@ -118,8 +118,8 @@ test_that("blcm_data has correct structure and class", {
 })
 
 test_that("in_init is correctly prepared for four_features_fixture", {
-  blcm_data <- prepare_blcm_data(four_features_fixture)
-  expect_type(blcm_data$in_init, "list")
-  print(length(blcm_data$in_init))
-  expect_equal(length(blcm_data$in_init), 2) # assuming 2 classes
+  blcm_data <- prepare_blcm_data(four_features_fixture, config)
+  expect_type(blcm_data$ids, "character")
+  expect_type(blcm_data$inits, "list")
+  expect_equal(length(blcm_data$inits$a), 2L) # assuming 2 classes
 })
