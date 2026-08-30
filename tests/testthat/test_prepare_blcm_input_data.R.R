@@ -52,7 +52,7 @@ two_classes_fixture <- data.frame(
 
 #eta
 test_that("generate eta vector works for 2 classes, 4 features, 16 samples", {
-  eta <- create_eta_vector(four_features_fixture)
+  eta <- create_eta_vector(four_features_fixture, data_column_configuration)
   eta_four_features_fixture <- c(1L, 1L, 1L, 1L,
                                 2L, 2L, 2L, 2L,
                                 NA_integer_, NA_integer_,
@@ -65,10 +65,8 @@ test_that("generate eta vector works for 2 classes, 4 features, 16 samples", {
 
 #eta 
 test_that("eta vector generates ", {
-  eta <- create_eta_vector(four_features_fixture)
+  eta <- create_eta_vector(four_features_fixture, data_column_configuration)
   expect_true(length(eta) == nrow(four_features_fixture))
-
-  
   expect_true(eta[1] == 1L)
   expect_true(eta[5] == 2L)
   expect_type(eta, "integer")
@@ -110,11 +108,18 @@ test_that("blcm_data list is prepared correctly for four_features_fixture", {
 test_that("blcm_data has correct structure and class", {
   blcm_data <- prepare_blcm_data(four_features_fixture)
   expect_true(is.list(blcm_data))
-  expect_true(length(blcm_data) == 4)
-  expect_named(blcm_data, c("ids", "class_columns", "feature_columns", "jags_data"))
+  expect_true(length(blcm_data) == 5)
+  expect_named(blcm_data, c("ids", "class_columns", "feature_columns", "jags_data", "in_init"))
 
   expect_type(blcm_data$ids, "character")
   expect_type(blcm_data$class_columns, "character")
   expect_type(blcm_data$feature_columns, "character")
   expect_type(blcm_data$jags_data, "list")
+})
+
+test_that("in_init is correctly prepared for four_features_fixture", {
+  blcm_data <- prepare_blcm_data(four_features_fixture)
+  expect_type(blcm_data$in_init, "list")
+  print(length(blcm_data$in_init))
+  expect_equal(length(blcm_data$in_init), 2) # assuming 2 classes
 })
