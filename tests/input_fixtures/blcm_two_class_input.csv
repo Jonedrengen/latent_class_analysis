@@ -1,4 +1,4 @@
-Sample_Name,training,CLASS_Human,CLASS_Animal,FEATURE_signature_1,FEATURE_signature_2,FEATURE_signature_3,FEATURE_signature_4
+Sample_Name,training,CLA_Human,CLA_Animal,FEA_signature_1,FEA_signature_2,FEA_signature_3,FEA_signature_4
 human_training_01,1,1,0,1,0,1,0
 human_training_02,1,1,0,1,0,1,0
 human_training_03,1,1,0,1,0,1,0

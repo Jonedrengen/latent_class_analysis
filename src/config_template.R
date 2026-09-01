@@ -4,10 +4,10 @@
 config <- list(
     mcmc_jags_configuration = list(
     #(NULL for random)
-    seed = 1,
-    chains = 8L,
-    iterations = 2000L,
-    burn_in = 1000L,
+    seed = NULL,
+    chains = 4L,
+    iterations = 500L,
+    burn_in = 100L,
     thin = 1L,
     save_params = c("pi","p","eta")
     ),

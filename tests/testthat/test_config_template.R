@@ -3,7 +3,7 @@
 test_that("mcmc_configuration correctly stores params", {
   expect_type(config$mcmc_jags_configuration, "list")
   expect_length(config$mcmc_jags_configuration, 6)
-  expect_equal(config$mcmc_jags_configuration$save_params, c("theta", "pi", "z"))
+  expect_equal(config$mcmc_jags_configuration$save_params, c("pi","p","eta"))
   expect_equal(config$mcmc_jags_configuration$chains, 4L)
 })
 

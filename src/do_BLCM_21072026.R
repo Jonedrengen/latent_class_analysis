@@ -16,7 +16,7 @@ blcm_script_dir <- function() {
   dirname(normalizePath(raw_path))
 }
 
-# do not touch! this is source dir (this dir)
+# do not touch! this is src dir
 .blcm_dir <- blcm_script_dir()
 
 #sourcing other scripts
@@ -35,25 +35,31 @@ source(file.path(.blcm_dir, "plots", "blcm_report_plots.R"))
 ############  functions #####################
 
 run_jags_model <- function(prepared_blcm_data,
-                           jags_mcmc_options,
+                           jags_mcmc_configuration,
                            model_file) {
                             
-  set.seed(jags_mcmc_options$seed)
+  set.seed(jags_mcmc_configuration$seed)
 
     jags_output <- R2jags::jags(
         model.file = model_file,
         data = prepared_blcm_data$jags_data,
         inits = prepared_blcm_data$inits, #later pass ini
-        parameters.to.save = jags_mcmc_options$save_params,
-        n.chains = jags_mcmc_options$chains,
-        n.iter = jags_mcmc_options$iterations,
-        n.burnin = jags_mcmc_options$burn_in,
-        n.thin = jags_mcmc_options$thin,
+        parameters.to.save = jags_mcmc_configuration$save_params,
+        n.chains = jags_mcmc_configuration$chains,
+        n.iter = jags_mcmc_configuration$iterations,
+        n.burnin = jags_mcmc_configuration$burn_in,
+        n.thin = jags_mcmc_configuration$thin,
         DIC = FALSE
       )
     jags_output
 }
+convert_to_mcmc <- function(jags_model_out) {
+  mcmc_object <- coda::as.mcmc(jags_model_out)
+  mcmc_object
+}
 
+apply_stephens <- function(jags_model_mcmc_object) {
+}
 
 #input parser for command line arguments
 blcm_input_parser <- function(argv = commandArgs(trailingOnly = TRUE)) {
@@ -78,14 +84,8 @@ blcm_input_parser <- function(argv = commandArgs(trailingOnly = TRUE)) {
 
 # big orchestration function for running the BLCM model
 run_blcm_main <- function(input_options,
+                          data,
                           config) {
-
-  #read data (move this to a func, when more input formats are supported)
-  data <- read.csv(
-    input_options$input,
-    check.names = FALSE,
-    stringsAsFactors = FALSE
-  )
   output_dir <- input_options$output
   logger("input data read",
          data = data, 
@@ -103,13 +103,20 @@ run_blcm_main <- function(input_options,
          data = prepared_blcm_data,
          log_file_path = file.path(output_dir, "blcm_log.txt"))
 
-
-  jags_model <- run_jags_model(prepared_blcm_data,
+  #run jags model
+  jags_model_out <- run_jags_model(prepared_blcm_data,
                                config$mcmc_jags_configuration, 
                                model_file = file.path(.blcm_dir, "models", "model_blcm.bug"))
   logger("jags model run completed",
-         data = jags_model,
+         data = jags_model_out,
          log_file_path = file.path(output_dir, "blcm_log.txt"))
+
+  #convert jags model output to mcmc object
+  jags_model_mcmc_object <- convert_to_mcmc(jags_model_out)
+  logger("jags model results converted to mcmc object",
+         data = jags_model_mcmc_object,
+         log_file_path = file.path(output_dir, "blcm_log.txt"),
+         summary_function = mcmc_object_summary)
 
 }
 
@@ -122,4 +129,10 @@ input_options <- blcm_input_parser()
 ##############################################
 ############ main function ###################
 
-run_blcm_main(input_options, config)
+#read data (move this to a func, when more input formats are supported)
+data <- read.csv(
+  input_options$input,
+  check.names = FALSE,
+  stringsAsFactors = FALSE
+)
+run_blcm_main(input_options, data, config)

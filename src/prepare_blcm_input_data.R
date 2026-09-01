@@ -51,7 +51,7 @@ create_jags_data <- function(data, config) {
   # number of features
   K <- ncol(Y)
 
-  # create a named list for the data
+  # create a list for the data
   jags_data <- list(Y = Y,
                     M_fit = M_fit,
                     N = N,

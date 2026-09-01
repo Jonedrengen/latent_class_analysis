@@ -120,6 +120,6 @@ test_that("blcm_data has correct structure and class", {
 test_that("in_init is correctly prepared for four_features_fixture", {
   blcm_data <- prepare_blcm_data(four_features_fixture, config)
   expect_type(blcm_data$ids, "character")
-  expect_type(blcm_data$inits, "list")
-  expect_equal(length(blcm_data$inits$a), 2L) # assuming 2 classes
+  expect_type(blcm_data$inits, "closure") # a closure, because it comes from a factory function
+  expect_true(is.function(blcm_data$inits))
 })

@@ -81,17 +81,17 @@ faulty_data_fixture_FEA <- data.frame(
 )
 
 test_that("get_blcm_class_columns returns correct class columns", {
-  expect_equal(get_blcm_class_column_names(four_features_fixture, data_column_configuration$class_columns_prefix), c("CLA_Human", "CLA_Animal"))
+  expect_equal(get_blcm_class_column_names(four_features_fixture, config$data_column_configuration$class_columns_prefix), c("CLA_Human", "CLA_Animal"))
 })
 
 test_that("get_blcm_feature_columns returns correct feature columns", {
-  expect_equal(get_blcm_feature_column_names(four_features_fixture, data_column_configuration$feature_columns_prefix), c("FEA_Animal_1", "FEA_Animal_2", "FEA_Human_1", "FEA_Human_2"))
+  expect_equal(get_blcm_feature_column_names(four_features_fixture, config$data_column_configuration$feature_columns_prefix), c("FEA_Animal_1", "FEA_Animal_2", "FEA_Human_1", "FEA_Human_2"))
 })
 
 test_that("failed_validation stops execution with an error in CLA columns", {
-    expect_error(validate_blcm_data_input(faulty_data_fixture_CLA), "Invalid values found in CLA_Human on row: 2")
+    expect_error(validate_blcm_data_input(faulty_data_fixture_CLA, config$data_column_configuration), "Invalid values found in CLA_Human on row: 2")
 })
 
 test_that("failed_validation stops execution with an error in FEA columns", {
-    expect_error(validate_blcm_data_input(faulty_data_fixture_FEA), "Invalid values found in FEA_Animal_1 on row: 3")
+    expect_error(validate_blcm_data_input(faulty_data_fixture_FEA, config$data_column_configuration), "Invalid values found in FEA_Animal_1 on row: 3")
 })
